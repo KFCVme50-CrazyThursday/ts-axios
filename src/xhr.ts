@@ -1,4 +1,5 @@
 import { AxiosRequestConfig, AxiosPromise, AxiosResponse } from './types'
+import { parseHeaders } from './helpers/headers'
 
 export default function xhr(config: AxiosRequestConfig): AxiosPromise {
   return new Promise(resolve => {
@@ -16,7 +17,8 @@ export default function xhr(config: AxiosRequestConfig): AxiosPromise {
       if (request.readyState !== 4) {
         return
       }
-      const responseHeaders = request.getAllResponseHeaders()
+      // const responseHeaders = request.getAllResponseHeaders()
+      const responseHeaders = parseHeaders(request.getAllResponseHeaders())
       const responseData = responseType && responseType !== 'text' ? request.response : request.responseText
       const response: AxiosResponse = {
         data: responseData,
@@ -31,7 +33,7 @@ export default function xhr(config: AxiosRequestConfig): AxiosPromise {
 
     Object.keys(headers).forEach(name => {
       if (data === null && name.toLowerCase() === 'content-type') {
-        delete headers[name] //传入的 data 为空的时候，请求 header 配置 Content-Type 是没有意义的
+        delete headers[name] // 传入的 data 为空的时候，请求 header 配置 Content-Type 是没有意义的
       } else {
         request.setRequestHeader(name, headers[name])
       }
