@@ -14,7 +14,7 @@
 
 ## Usage
 
-<!-- ```javascript
+```javascript
 const axios = require('axios')
 
 axios({
@@ -25,8 +25,27 @@ axios({
     lastName: 'q'
   }
 })
-``` -->
+```
 
-扩展接口还没写 
+## 扩展接口还没写
 
-2020/11/22 go on 先熟悉下之前写的代码再把git配置下
+2020/11/22 go on 先熟悉下之前写的代码再把 git 配置下
+扩展接口
+
+- axios.request(config)
+
+- axios.get(url[, config])
+
+- axios.delete(url[, config])
+
+- axios.head(url[, config])
+
+- axios.options(url[, config])
+
+- axios.post(url[, data[, config]])
+
+- axios.put(url[, data[, config]])
+
+- axios.patch(url[, data[, config]])
+
+
