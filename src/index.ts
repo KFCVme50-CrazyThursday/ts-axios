@@ -1,4 +1,4 @@
-import axios from './core/Axios'
+import axios from './Axios'
 
 export * from './types'
 
