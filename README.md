@@ -48,4 +48,24 @@ axios({
 
 - axios.patch(url[, data[, config]])
 
+## 函数重载
 
+- 支持传入多个参数： 修改AxiosInstaance类型，修改该request函数
+
+  1. 只穿一个对象参数时候
+  2. 传入两个参数
+
+```javascript
+axios({
+  url: '/extend/post1',
+  method: 'post',
+  data: { msg: 'go to sleep' }
+})
+
+// or
+
+axios('/extend/post1', {
+  method: 'post',
+  data: { msg: 'go to sleep' }
+})
+```

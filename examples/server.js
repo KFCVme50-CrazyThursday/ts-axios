@@ -73,7 +73,23 @@ router.get('/error/timeout', function (req, res) {
     })
   }, 3000)
 })
+router.post('/extend/post', function (req, res) {
+  res.json({
+    msg: `狗命要紧 睡觉睡觉`
+  })
+})
 
+router.post('/extend/post1', function (req, res) {
+  res.json({
+    msg: `你好 世界; 你好, sq`
+  })
+})
+
+router.put('/extend/put1', function (req, res) {
+  res.json({
+    msg: `put 方法`
+  })
+})
 app.use(router)
 
 const port = process.env.PORT || 8080

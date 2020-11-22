@@ -16,7 +16,7 @@ export type Method =
 
 export interface AxiosRequestConfig {
   // 定义请求接口
-  url: string
+  url?: string
   method?: Method // HTTP 方法；
   data?: any // post、patch 等类型请求的数据，放到 request body 中的
   params?: any // params 是 get、head 等类型请求的数据，拼接到 url 的 query string 中的。
@@ -59,4 +59,6 @@ export interface Axios {
 
 export interface AxiosInstance extends Axios {
   (config: AxiosRequestConfig): AxiosPromise
+
+  (url: string, config?: AxiosRequestConfig): AxiosPromise
 }
