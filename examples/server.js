@@ -8,42 +8,46 @@ const WebpackConfig = require('./webpack.config')
 const app = express()
 const compiler = webpack(WebpackConfig)
 
-app.use(webpackDevMiddleware(compiler, {
-  publicPath: '/__build__/',
-  stats: {
-    colors: true,
-    chunks: false
-  }
-}))
+app.use(
+  webpackDevMiddleware(compiler, {
+    publicPath: '/__build__/',
+    stats: {
+      colors: true,
+      chunks: false
+    }
+  })
+)
 
 app.use(webpackHotMiddleware(compiler))
 
 app.use(express.static(__dirname))
 
 app.use(bodyParser.json())
-app.use(bodyParser.urlencoded({
-  extended: true
-}))
+app.use(
+  bodyParser.urlencoded({
+    extended: true
+  })
+)
 
 const router = express.Router()
 
-router.get('/simple/get', function (req, res) {
+router.get('/simple/get', function(req, res) {
   res.json({
     msg: `hello world`
   })
 })
 
-router.get('/base/get', function (req, res) {
+router.get('/base/get', function(req, res) {
   res.json(req.query)
 })
 
-router.post('/base/post', function (req, res) {
+router.post('/base/post', function(req, res) {
   res.json(req.body)
 })
 
-router.post('/base/buffer', function (req, res) {
+router.post('/base/buffer', function(req, res) {
   let msg = []
-  req.on('data', (chunk) => {
+  req.on('data', chunk => {
     if (chunk) {
       msg.push(chunk)
     }
@@ -55,7 +59,7 @@ router.post('/base/buffer', function (req, res) {
 })
 
 // 错误
-router.get('/error/get', function (req, res) {
+router.get('/error/get', function(req, res) {
   if (Math.random() > 0.5) {
     res.json({
       msg: `hello world`
@@ -66,30 +70,43 @@ router.get('/error/get', function (req, res) {
   }
 })
 
-router.get('/error/timeout', function (req, res) {
+router.get('/error/timeout', function(req, res) {
   setTimeout(() => {
     res.json({
       msg: `hello world`
     })
   }, 3000)
 })
-router.post('/extend/post', function (req, res) {
+router.post('/extend/post', function(req, res) {
   res.json({
     msg: `狗命要紧 睡觉睡觉`
   })
 })
 
-router.post('/extend/post1', function (req, res) {
+router.post('/extend/post1', function(req, res) {
   res.json({
     msg: `你好 世界; 你好, sq`
   })
 })
 
-router.put('/extend/put1', function (req, res) {
+router.put('/extend/put1', function(req, res) {
   res.json({
     msg: `put 方法`
   })
 })
+
+router.get('/extend/user', function(req, res) {
+  console.log(99, req.query)
+  res.json({
+    code: 0,
+    message: 'ok',
+    result: {
+      name: req.query.name,
+      age: 18
+    }
+  })
+})
+
 app.use(router)
 
 const port = process.env.PORT || 8080
