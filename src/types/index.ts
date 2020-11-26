@@ -15,6 +15,7 @@ export type Method =
   | 'PATCH'
 
 export interface AxiosRequestConfig {
+  [propName: string]: any // 字符串索引签名
   // 定义请求接口
   url?: string
   method?: Method // HTTP 方法；
@@ -47,6 +48,7 @@ export interface AxiosError extends Error {
 }
 
 export interface Axios {
+  defaults: AxiosRequestConfig
   interceptors: {
     request: AxiosInterceptorManager<AxiosRequestConfig>
     response: AxiosInterceptorManager<AxiosResponse>

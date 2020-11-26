@@ -121,3 +121,6 @@ const myInterceptor = axios.interceptors.request.use(function() {
 }) // 返回一个拦截器的id
 axios.interceptors.request.eject(myInterceptor)
 ```
+
+## 默认配置与合并
+
