@@ -39,7 +39,7 @@ strateKeysDeepMerge.forEach(key => {
 // config1 为默认的 config ，2 为传入的
 export default function mergeConfig(
   config1: AxiosRequestConfig,
-  config2: AxiosRequestConfig
+  config2?: AxiosRequestConfig
 ): AxiosRequestConfig {
   if (!config2) {
     config2 = {}

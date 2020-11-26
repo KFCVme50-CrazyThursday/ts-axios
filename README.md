@@ -128,3 +128,10 @@ axios.interceptors.request.eject(myInterceptor)
 
 - transformRequest
 - transformResponse
+
+## axios.create
+
+create a new instance of axios with a custom config.
+
+- 创建一个新的 axios 实例，防止修改了 axios 的默认配置会影响所有的请求
+- 可以同时传入新的配置和默认配置合并，并做为新的默认配置。
