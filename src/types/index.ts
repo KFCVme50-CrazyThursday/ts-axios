@@ -26,6 +26,8 @@ export interface AxiosRequestConfig {
   // 对于一个 AJAX 请求的 response，我们是可以指定它的响应的数据类型的，
   // 通过设置 XMLHttpRequest 对象的 responseType 属性
   timeout?: number
+  transformRequest?: AxiosTransformer | AxiosTransformer[]
+  transformResponse?: AxiosTransformer | AxiosTransformer[]
 }
 // 定义返回数据接口类型
 export interface AxiosResponse<T = any> {
@@ -78,4 +80,8 @@ export interface RejectedFn<T = any> {
 export interface AxiosInterceptorManager<T> {
   use(resolved: ResolvedFn<T>, rejected?: RejectedFn): number
   eject(id: number): void
+}
+
+export interface AxiosTransformer {
+  (data: any, headers?: any): any
 }

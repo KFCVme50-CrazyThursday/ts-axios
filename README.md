@@ -124,3 +124,7 @@ axios.interceptors.request.eject(myInterceptor)
 
 ## 默认配置与合并
 
+## 请求与相应配置优化
+
+- transformRequest
+- transformResponse
