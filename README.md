@@ -135,3 +135,98 @@ create a new instance of axios with a custom config.
 
 - 创建一个新的 axios 实例，防止修改了 axios 的默认配置会影响所有的请求
 - 可以同时传入新的配置和默认配置合并，并做为新的默认配置。
+
+```javascript
+const instance = axios.create({
+  transformRequest: [(function(data) {
+    return qs.stringify(data)
+  }), ...(axios.defaults.transformRequest as AxiosTransformer[])],
+  transformResponse: [...(axios.defaults.transformResponse as AxiosTransformer[]), function(data) {
+    if (typeof data === 'object') {
+      data.b = 2
+    }
+    return data
+  }]
+})
+```
+
+## 取消功能
+
+前端搜索框输入搜索，除了使用 debounce 外，假如后端服务响应很慢，这个时候大于了 debounce 时间，那么可能就会导致后搜索的内容先与前搜索的内容返回，导致数据紊乱。
+假如前面的请求还没有响应，就把前面的请求取消。这样就能解决这个问题
+
+You can cancel a request using a cancel token.
+You can create a cancel token using the CancelToken.source factory as shown below:
+
+```javascript
+const CancelToken = axios.CancelToken
+const source = CancelToken.source()
+
+axios
+  .get('/user/12345', {
+    cancelToken: source.token
+  })
+  .catch(function(thrown) {
+    if (axios.isCancel(thrown)) {
+      console.log('Request canceled', thrown.message)
+    } else {
+      // handle error
+    }
+  })
+
+axios.post(
+  '/user/12345',
+  {
+    name: 'new name'
+  },
+  {
+    cancelToken: source.token
+  }
+)
+
+// cancel the request (the message parameter is optional)
+source.cancel('Operation canceled by the user.')
+```
+
+You can also create a cancel token by passing an executor function to the CancelToken constructor:
+
+```javascript
+const CancelToken = axios.CancelToken
+let cancel
+
+axios.get('/user/12345', {
+  cancelToken: new CancelToken(function executor(c) {
+    // An executor function receives a cancel function as a parameter
+    cancel = c
+  })
+})
+
+// cancel the request
+cancel()
+```
+
+**实现方案**：
+
+- 请求配置 cancelToken 属性，然后在外部调用 cancel 方法
+- 请求是异步过程，最终会执行 xhr.send 方法，xhr 对象提供 abort 方法，可以把请求取消
+- 执行 cancel 方法时候，插入一段代码去触发 xhr.abort 方法
+  - 利用 promise 实现异步分离，在 cancelToken 中保存一个 pending 状态的 promise，当执行 cancel 方法时候，能访问到该 promise 对象，把它从 pending 状态变成 resolved 状态，这样我们就可以在 then 函数中去实现取消请求的逻辑
+
+```javascript
+if (cancelToken) {
+  cancelToken.promise.then(reason => {
+    request.abort()
+    reject(reason)
+  })
+}
+```
+
+## 更多功能
+
+- withCredentials
+- XSRF 防御
+- 上传下载进度监控
+-
+-
+
+## 单元测试

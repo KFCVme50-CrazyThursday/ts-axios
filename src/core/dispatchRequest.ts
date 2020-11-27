@@ -8,10 +8,19 @@ import { processHeaders, flattenHeaders } from '../helpers/headers'
 import transform from './transform'
 
 export default function dispatchRequest(config: AxiosRequestConfig): AxiosPromise {
+  // 发送请求前检查 cancelToken 是否已经使用过了
+  throwIfCancellationRequested(config)
+
   processConfig(config)
   return xhr(config).then(res => {
     return transformResponseData(res)
   })
+}
+
+function throwIfCancellationRequested(config: AxiosRequestConfig): void {
+  if (config.cancelToken) {
+    config.cancelToken.throwIfRequested()
+  }
 }
 
 // function axios(config: AxiosRequestConfig): AxiosPromise {
