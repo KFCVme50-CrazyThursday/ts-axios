@@ -29,6 +29,7 @@ export interface AxiosRequestConfig {
   transformRequest?: AxiosTransformer | AxiosTransformer[]
   transformResponse?: AxiosTransformer | AxiosTransformer[]
   cancelToken?: CancelToken
+  withCredentials?: boolean
 }
 // 定义返回数据接口类型
 export interface AxiosResponse<T = any> {

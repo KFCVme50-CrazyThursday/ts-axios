@@ -224,9 +224,8 @@ if (cancelToken) {
 ## 更多功能
 
 - withCredentials
+  - 在解决跨域请求后，发送请求是不携带 cookie 的，通过设置 xhr 对象的 withCredentials 为 true 即可
 - XSRF 防御
 - 上传下载进度监控
--
--
 
 ## 单元测试

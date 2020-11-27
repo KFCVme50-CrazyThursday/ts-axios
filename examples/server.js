@@ -127,6 +127,12 @@ router.post('/cancel/post', function(req, res) {
   }, 1000)
 })
 
+router.get('/more/get', function(req, res) {
+  res.json({
+    msg: `hello world`
+  })
+})
+
 app.use(router)
 
 const port = process.env.PORT || 8080
