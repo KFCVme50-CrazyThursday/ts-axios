@@ -225,7 +225,21 @@ if (cancelToken) {
 
 - withCredentials
   - 在解决跨域请求后，发送请求是不携带 cookie 的，通过设置 xhr 对象的 withCredentials 为 true 即可
-- XSRF 防御
+- XSRF 防御：有多种方式防止，比如验证请求的 Referer,但 referer 是可以伪造的，相对来说验证 token 更稳妥
+  - 服务端要求请求每次都包含一个 token，由服务端生成，并通过 set-cookie 的方式种到客户端，每次发送请求时取出这个 token 并验证
+  - 从 cookie 中读取对应的 token 值，然后添加到请求 headers 中。允许用户配置 xsrfCookieName 和 xsrfHeaderName，其中 xsrfCookieName 表示存储 token 的 cookie 名称，xsrfHeaderName 表示请求 headers 中 token 对应的 header 名称。
+
+```javascript
+axios
+  .get('/more/get', {
+    xsrfCookieName: 'XSRF-TOKEN', // default
+    xsrfHeaderName: 'X-XSRF-TOKEN' // default
+  })
+  .then(res => {
+    console.log(res)
+  })
+```
+
 - 上传下载进度监控
 
 ## 单元测试

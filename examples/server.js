@@ -133,6 +133,15 @@ router.get('/more/get', function(req, res) {
   })
 })
 
+// 服务端注入cookie
+app.use(
+  express.static(__dirname, {
+    setHeaders(res) {
+      res.cookie('XSRF-TOKEN-D', '1234abc')
+    }
+  })
+)
+
 app.use(router)
 
 const port = process.env.PORT || 8080
