@@ -33,6 +33,9 @@ export interface AxiosRequestConfig {
 
   xsrfCookieName?: string
   xsrfHeaderName?: string
+
+  onDownloadProgress?: (e: ProgressEvent) => void
+  onUploadProgress?: (e: ProgressEvent) => void
 }
 // 定义返回数据接口类型
 export interface AxiosResponse<T = any> {

@@ -241,5 +241,20 @@ axios
 ```
 
 - 上传下载进度监控
+  - 使用 xhr 提供了一个 progress 事件 与 upload.onprogress。但次事件并不能确切的监听到上传下载进度，在前端页面只能提供一个漂亮的进度条，毕竟数据的上传是相互的，前端上传了并不代表服务器就成功接收了。
+
+```javascript
+axios.get('/more/get', {
+  onDownloadProgress(progressEvent) {
+    // 监听下载进度
+  }
+})
+
+axios.post('/more/post', {
+  onUploadProgress(progressEvent) {
+    // 监听上传进度
+  }
+})
+```
 
 ## 单元测试
