@@ -330,4 +330,42 @@ instance.get('/get')
 instance.post('/post')
 ```
 
+- 方法扩展
+  - axios.all axios.spread : 使用 Promise.all 实现
+  - 通过 axios.Axios 对外暴露了 Axios 类
+  - getUri 返回 url
+
+```javascript
+function getUserAccount() {
+  return axios.get('/user/12345')
+}
+
+function getUserPermissions() {
+  return axios.get('/user/12345/permissions')
+}
+
+axios.all([getUserAccount(), getUserPermissions()]).then(
+  axios.spread(function(acct, perms) {
+    // Both requests are now complete
+  })
+)
+
+Promise.all([getUserAccount(), getUserPermissions()])
+  .then(([acct,perms]) {
+    // Both requests are now complete
+  }));
+
+const fakeConfig = {
+  baseURL: 'https://www.baidu.com/',
+  url: '/user/12345',
+  params: {
+    idClient: 1,
+    idTest: 2,
+    testString: 'thisIsATest'
+  }
+}
+console.log(axios.getUri(fakeConfig))
+// https://www.baidu.com/user/12345?idClient=1&idTest=2&testString=thisIsATest
+```
+
 ## 单元测试

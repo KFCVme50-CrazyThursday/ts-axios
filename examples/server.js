@@ -175,6 +175,17 @@ router.get('/more/304', function(req, res) {
   res.end()
 })
 
+router.get('/more/A', function(req, res) {
+  res.json({
+    msg: `AAAAAAAAAAAA`
+  })
+})
+router.get('/more/B', function(req, res) {
+  res.json({
+    msg: `BBBBBBBBBBB`
+  })
+})
+
 app.use(router)
 
 const port = process.env.PORT || 8080
