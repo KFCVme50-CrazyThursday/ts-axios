@@ -298,4 +298,24 @@ axios
   })
 ```
 
+- 自定义参数序列化
+  对 请求的 url 参数进行处理时候会解析传入的 params 对象，根据一定的规则把它解析成字符串，然后添加在 url 后面。 axios 库的默认解析规则对一些特殊的字符串不转义，比如 @ + 等。在请求配置中配置 paramsSerializer 函数来自定义参数的解析规则，该函数接受 params 参数，返回值作为解析后的结果
+
+```javascript
+axios
+  .get('/more/get', {
+    params: {
+      a: 1,
+      b: 2,
+      c: ['a', 'b', 'c']
+    },
+    paramsSerializer(params) {
+      return qs.stringify(params, { arrayFormat: 'brackets' })
+    }
+  })
+  .then(res => {
+    console.log(res)
+  })
+```
+
 ## 单元测试
