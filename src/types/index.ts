@@ -40,6 +40,7 @@ export interface AxiosRequestConfig {
   auth?: AxiosBasicCredentials // http 授权
   validateStatus?: (status: number) => boolean // 自定义status状态码
   paramsSerializer?: (params: any) => string // 自定义参数解析
+  baseURL?: string
 }
 // 定义返回数据接口类型
 export interface AxiosResponse<T = any> {

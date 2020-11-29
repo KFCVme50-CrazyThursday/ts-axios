@@ -318,4 +318,16 @@ axios
   })
 ```
 
+- baseURL 配置
+
+```javascript
+const instance = axios.create({
+  baseURL: 'https://some-domain.com/api'
+})
+
+instance.get('/get')
+
+instance.post('/post')
+```
+
 ## 单元测试

@@ -129,13 +129,13 @@ axios.get('/more/get', {
   console.log(res)
 })
 
-const instance = axios.create({
+const instance2 = axios.create({
   paramsSerializer(params) {
     return qs.stringify(params, { arrayFormat: 'brackets' })
   }
 })
 
-instance.get('/more/get', {
+instance2.get('/more/get', {
   params: {
     a: 1,
     b: 2,
@@ -144,3 +144,11 @@ instance.get('/more/get', {
 }).then(res => {
   console.log(res)
 })
+
+const instance3 = axios.create({
+  baseURL: 'https://cn.vuejs.org/'
+})
+
+instance3.get('/images/imooc-sponsor2.png')
+
+instance3.get('https://cn.vuejs.org/images/logo.png')
