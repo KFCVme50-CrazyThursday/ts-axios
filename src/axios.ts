@@ -1,41 +1,38 @@
-import { AxiosRequestConfig, AxiosPromise, AxiosResponse } from './types'
-import xhr from './xhr'
-import { buildURL } from './helpers/url'
-import { transformRequest, transformResponse } from './helpers/data'
-import { processHeaders } from './helpers/headers'
-// import { transformResponse } from './helpers/data'
+import { AxiosInstance, AxiosRequestConfig, AxiosStatic } from './types'
+import Axios from './core/Axios'
+import { extend } from './helpers/util'
+import defaults from './defaults'
+import mergeConfig from './core/mergeConfig'
 
-function axios(config: AxiosRequestConfig): AxiosPromise {
-  // TODO
-  processConfig(config)
-  return xhr(config).then(res => {
-    return transformResponseData(res)
-  })
+import CancelToken from './cancel/CancelToken'
+import Cancel, { isCancel } from './cancel/Cancel'
+
+function createInstance(config: AxiosRequestConfig): AxiosStatic {
+  const context = new Axios(config)
+  const instance = Axios.prototype.request.bind(context)
+
+  extend(instance, context)
+  return instance as AxiosStatic
 }
 
-function transformResponseData(res: AxiosResponse): AxiosResponse {
-  res.data = transformResponse(res.data)
-  return res
+const axios = createInstance(defaults)
+axios.create = function create(config) {
+  return createInstance(mergeConfig(defaults, config))
 }
 
-function processConfig(config: AxiosRequestConfig): void {
-  config.url = transformUrl(config)
-  config.headers = transformHeaders(config)
-  config.data = transformRequestData(config)
+axios.CancelToken = CancelToken
+axios.Cancel = Cancel
+axios.isCancel = isCancel
+
+axios.all = function all(promises) {
+  return Promise.all(promises)
 }
 
-function transformUrl(config: AxiosRequestConfig): string {
-  const { url, params } = config
-  return buildURL(url, params)
+axios.spread = function spread(callback) {
+  return function wrap(arr) {
+    return callback.apply(null, arr)
+  }
 }
-
-function transformRequestData(config: AxiosRequestConfig): any {
-  return transformRequest(config.data)
-}
-
-function transformHeaders(config: AxiosRequestConfig): any {
-  const { headers = {}, data } = config
-  return processHeaders(headers, data)
-}
+axios.Axios = Axios
 
 export default axios

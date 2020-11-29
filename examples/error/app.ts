@@ -19,7 +19,7 @@ axios({
     console.log(res)
   })
   .catch(e => {
-    console.log(e)
+    console.log(22,'e',e)
   })
 
 setTimeout(() => {
@@ -44,6 +44,7 @@ axios({
     console.log(res)
   })
   .catch((e: AxiosError) => {
+    console.log(47,'e:',e)
     console.log('message:',e.message)
-    console.log('e.code:',e.code)
+    console.log(e.code)
   })

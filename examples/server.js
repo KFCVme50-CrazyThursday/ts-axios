@@ -1,4 +1,5 @@
 const express = require('express')
+const path = require('path')
 const bodyParser = require('body-parser')
 const webpack = require('webpack')
 const webpackDevMiddleware = require('webpack-dev-middleware')
@@ -8,42 +9,46 @@ const WebpackConfig = require('./webpack.config')
 const app = express()
 const compiler = webpack(WebpackConfig)
 
-app.use(webpackDevMiddleware(compiler, {
-  publicPath: '/__build__/',
-  stats: {
-    colors: true,
-    chunks: false
-  }
-}))
+app.use(
+  webpackDevMiddleware(compiler, {
+    publicPath: '/__build__/',
+    stats: {
+      colors: true,
+      chunks: false
+    }
+  })
+)
 
 app.use(webpackHotMiddleware(compiler))
 
 app.use(express.static(__dirname))
 
 app.use(bodyParser.json())
-app.use(bodyParser.urlencoded({
-  extended: true
-}))
+app.use(
+  bodyParser.urlencoded({
+    extended: true
+  })
+)
 
 const router = express.Router()
 
-router.get('/simple/get', function (req, res) {
+router.get('/simple/get', function(req, res) {
   res.json({
     msg: `hello world`
   })
 })
 
-router.get('/base/get', function (req, res) {
+router.get('/base/get', function(req, res) {
   res.json(req.query)
 })
 
-router.post('/base/post', function (req, res) {
+router.post('/base/post', function(req, res) {
   res.json(req.body)
 })
 
-router.post('/base/buffer', function (req, res) {
+router.post('/base/buffer', function(req, res) {
   let msg = []
-  req.on('data', (chunk) => {
+  req.on('data', chunk => {
     if (chunk) {
       msg.push(chunk)
     }
@@ -55,7 +60,7 @@ router.post('/base/buffer', function (req, res) {
 })
 
 // 错误
-router.get('/error/get', function (req, res) {
+router.get('/error/get', function(req, res) {
   if (Math.random() > 0.5) {
     res.json({
       msg: `hello world`
@@ -66,12 +71,119 @@ router.get('/error/get', function (req, res) {
   }
 })
 
-router.get('/error/timeout', function (req, res) {
+router.get('/error/timeout', function(req, res) {
   setTimeout(() => {
     res.json({
       msg: `hello world`
     })
   }, 3000)
+})
+router.post('/extend/post', function(req, res) {
+  res.json({
+    msg: `狗命要紧 睡觉睡觉`
+  })
+})
+
+router.post('/extend/post1', function(req, res) {
+  res.json({
+    msg: `你好 世界; 你好, sq`
+  })
+})
+
+router.put('/extend/put1', function(req, res) {
+  res.json({
+    msg: `put 方法`
+  })
+})
+
+router.get('/extend/user', function(req, res) {
+  console.log(99, req.query)
+  res.json({
+    code: 0,
+    message: 'ok',
+    result: {
+      name: req.query.name,
+      age: 18
+    }
+  })
+})
+
+router.get('/interceptor/get', function(req, res) {
+  res.end('hello')
+})
+
+router.post('/config/post', function(req, res) {
+  res.json(req.body)
+})
+
+router.get('/cancel/get', function(req, res) {
+  setTimeout(() => {
+    res.json('hello, sq')
+  }, 1000)
+})
+
+router.post('/cancel/post', function(req, res) {
+  setTimeout(() => {
+    res.json(req.body)
+  }, 1000)
+})
+
+router.get('/more/get', function(req, res) {
+  res.json({
+    msg: `hello world`
+  })
+})
+
+// 服务端注入cookie
+app.use(
+  express.static(__dirname, {
+    setHeaders(res) {
+      res.cookie('XSRF-TOKEN-D', '1234abc')
+    }
+  })
+)
+
+const multipart = require('connect-multiparty')
+app.use(
+  multipart({
+    uploadDir: path.resolve(__dirname, 'upload-file')
+  })
+)
+
+router.post('/more/upload', function(req, res) {
+  console.log(req.body, req.files)
+  res.end('upload success!')
+})
+
+const atob = require('atob')
+
+router.post('/more/post', function(req, res) {
+  const auth = req.headers.authorization
+  const [type, credentials] = auth.split(' ')
+  console.log(atob(credentials))
+  const [username, password] = atob(credentials).split(':')
+  if (type === 'Basic' && username === 'sq1' && password === '123456') {
+    res.json(req.body)
+  } else {
+    res.status(401)
+    res.end('UnAuthorization')
+  }
+})
+
+router.get('/more/304', function(req, res) {
+  res.status(304)
+  res.end()
+})
+
+router.get('/more/A', function(req, res) {
+  res.json({
+    msg: `AAAAAAAAAAAA`
+  })
+})
+router.get('/more/B', function(req, res) {
+  res.json({
+    msg: `BBBBBBBBBBB`
+  })
 })
 
 app.use(router)
