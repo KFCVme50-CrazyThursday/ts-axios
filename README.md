@@ -280,4 +280,22 @@ axios
   })
 ```
 
+- 自定义 status
+  - 之前 `ts-axios` 在处理响应结果的时候，认为 HTTP [status](https://developer.mozilla.org/en-US/docs/Web/API/XMLHttpRequest/status) 在 200 和 300 之间是一个合法值，在这个区间之外则创建一个错误。有些时候我们想自定义这个规则，比如认为 304 也是一个合法的状态码，所以我们希望 `ts-axios` 能提供一个配置，允许我们自定义合法状态码规则，在请求配置中添加一个 validateStatus 函数，它可以根据参数 status 来自定义合法状态码的规则。。
+
+```javascript
+axios
+  .get('/more/304', {
+    validateStatus(status) {
+      return status >= 200 && status < 400
+    }
+  })
+  .then(res => {
+    console.log(res)
+  })
+  .catch((e: AxiosError) => {
+    console.log(e.message)
+  })
+```
+
 ## 单元测试
