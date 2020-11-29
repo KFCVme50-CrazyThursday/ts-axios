@@ -155,6 +155,21 @@ router.post('/more/upload', function(req, res) {
   res.end('upload success!')
 })
 
+const atob = require('atob')
+
+router.post('/more/post', function(req, res) {
+  const auth = req.headers.authorization
+  const [type, credentials] = auth.split(' ')
+  console.log(atob(credentials))
+  const [username, password] = atob(credentials).split(':')
+  if (type === 'Basic' && username === 'sq1' && password === '123456') {
+    res.json(req.body)
+  } else {
+    res.status(401)
+    res.end('UnAuthorization')
+  }
+})
+
 app.use(router)
 
 const port = process.env.PORT || 8080
