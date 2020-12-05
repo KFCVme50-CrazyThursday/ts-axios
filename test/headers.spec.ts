@@ -34,14 +34,16 @@ describe('headers', () => {
     axios('/foo')
     return getAjaxRequest().then(res => {
       for (let key in headers) {
-        expect(res.requestHeaders[key]).toEqual(headers[key])
+        if (headers.hasOwnProperty(key)) {
+          expect(res.requestHeaders[key]).toEqual(headers[key])
+        }
       }
     })
   })
   test('should add extra headers for post', () => {
     axios.post('/foo', 'name=sq')
     return getAjaxRequest().then(res => {
-      testHeaderValue(res.requestHeaders, 'Content-Type', 'application/x-www/form-urlencoded')
+      testHeaderValue(res.requestHeaders, 'Content-Type', 'application/x-www-form-urlencoded')
     })
   })
   test('should user application/json when posting an object', () => {
@@ -50,7 +52,7 @@ describe('headers', () => {
       age: 18
     })
     return getAjaxRequest().then(res => {
-      testHeaderValue(res.requestHeaders, 'Content-Type', 'application/json')
+      testHeaderValue(res.requestHeaders, 'Content-Type', 'application/json;charset=utf-8')
     })
   })
 
@@ -58,6 +60,13 @@ describe('headers', () => {
     axios.post('/foo')
     return getAjaxRequest().then(res => {
       testHeaderValue(res.requestHeaders, 'Content-Type', undefined)
+    })
+  })
+
+  it('should preserve content-type if data is false', () => {
+    axios.post('/foo', false)
+    return getAjaxRequest().then(res => {
+      testHeaderValue(res.requestHeaders, 'Content-Type', 'application/x-www-form-urlencoded')
     })
   })
 
