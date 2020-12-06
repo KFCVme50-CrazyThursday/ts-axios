@@ -327,10 +327,12 @@
           function processCancel() {
               // CancelToken存在取消请求
               if (cancelToken) {
-                  cancelToken.promise.then(function (reason) {
+                  cancelToken.promise
+                      .then(function (reason) {
                       request.abort();
                       reject(reason);
-                  }).catch(
+                  })
+                      .catch(
                   /* istanbul ignore next */
                   function () {
                       // do nothing

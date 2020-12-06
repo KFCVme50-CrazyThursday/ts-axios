@@ -377,4 +377,13 @@ console.log(axios.getUri(fakeConfig))
    使用 Mac 自带的终端看到 最初是由于 typedoc 使用 ts3.0.3 导致，升级该插件问题解决。
    但还是存在一个问题 升级后的插件使用的是 3.9.7 版本的 ts 而项目里并不是这个版本，wtf ？
 
-   更改项目ts版本
+   更改项目 ts 版本
+
+2. 发布 npm 时报错
+   `403 Forbidden - PUT https://registry.npm.taobao.org/ts-axios-sq - [no_perms] Private mode enable, only admin can publish this module`
+
+   `npm config get registry`
+   发现输出的是淘宝的 `https://registry.npm.taobao.org/`
+   切换会镜像 `npm config set registry=http://registry.npmjs.org`
+
+   `npm config get registry` 查看镜像，然后重新登录 `npm login`
