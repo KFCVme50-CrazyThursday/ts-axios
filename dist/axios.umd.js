@@ -330,6 +330,10 @@
                   cancelToken.promise.then(function (reason) {
                       request.abort();
                       reject(reason);
+                  }).catch(
+                  /* istanbul ignore next */
+                  function () {
+                      // do nothing
                   });
               }
           }

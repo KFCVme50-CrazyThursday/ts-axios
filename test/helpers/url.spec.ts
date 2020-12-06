@@ -73,7 +73,7 @@ describe('helps/url', () => {
       ).toBe('/foo?foo=bar&query=baz')
     })
     test('should use serializer if provided', () => {
-      const serializer = jest.fn(() => {
+      const serializer = jest.fn(arg => {
         return 'foo=bar'
       })
       const params = { foo: 'bar' }
