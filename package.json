@@ -1,6 +1,6 @@
 {
-  "name": "ts-axios",
-  "version": "0.0.0",
+  "name": "ts-axios-sq",
+  "version": "0.0.1",
   "description": "",
   "keywords": [],
   "main": "dist/axios.umd.js",
@@ -12,7 +12,7 @@
   "author": "shengqiong <shengjiong007@outlook.com>",
   "repository": {
     "type": "git",
-    "url": ""
+    "url": "https://github.com/shengjiong/ts-axios"
   },
   "license": "MIT",
   "engines": {
@@ -34,7 +34,9 @@
     "semantic-release": "semantic-release",
     "semantic-release-prepare": "ts-node tools/semantic-release-prepare",
     "precommit": "lint-staged",
-    "travis-deploy-once": "travis-deploy-once"
+    "travis-deploy-once": "travis-deploy-once",
+    "prepub": "npm run test:prod && npm run build",
+    "pub": "sh release.sh"
   },
   "lint-staged": {
     "{src,test}/**/*.ts": [
