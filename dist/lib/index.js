@@ -10,7 +10,7 @@ var __exportStar = (this && this.__exportStar) || function(m, exports) {
     for (var p in m) if (p !== "default" && !exports.hasOwnProperty(p)) __createBinding(exports, m, p);
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-var Axios_1 = require("./Axios");
+var axios_1 = require("./axios");
 __exportStar(require("./types"), exports);
-exports.default = Axios_1.default;
+exports.default = axios_1.default;
 //# sourceMappingURL=index.js.map
